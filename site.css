@@ -1638,25 +1638,41 @@ Augmenter taille du dégradé (pour éviter les lignes claires sur certains écr
   /* Le fond_texte chevauche la photo : la photo passe dessous */
   margin-top:calc(-1 * 100px);
   z-index:2;
+  /* Le fond dépend du texte, donc pas de hauteur fixe ici */
+  display:flex;
+  justify-content:center;
+  overflow:visible;
 }
 
 .page-equipe .member-caption-bg{
-  width:100%;
-  height:200px;
-  display:block;
-  object-fit:contain;
+  /* On ne l'utilise plus : le fond est maintenant un background du texte */
+  display:none;
 }
 
 .page-equipe .member-caption-content{
-  position:absolute;
-  inset:0;
+  /* Bloc dimensionné par le contenu (texte) + marge fixe en pixels */
+  position:relative;
   z-index:1;
-  display:flex;
+  display:inline-flex;
   flex-direction:column;
-  justify-content:center;
   align-items:center;
+  justify-content:flex-start;
+  gap:3px;
   text-align:center;
-  padding:var(--espace-3);
+
+  /* “Nombre de pixels plus grand que le texte” = padding */
+  /* + haut => texte plus bas, + côtés => fond plus large */
+  padding:60px 90px 26px;
+
+  /* Fond : centré sur le texte, s'étire pour suivre le bloc */
+  background-image:url("assets_equipe/fond_texte.png");
+  background-repeat:no-repeat;
+  background-position-y: bottom;
+  background-position-x: calc(50% + 10px);
+  background-size:110% 70%;
+
+  /* Évite que ça devienne trop large sur petits écrans */
+  max-width:min(800px, 100%);
 }
 
 .page-equipe .member-caption-content h3{
@@ -1664,13 +1680,16 @@ Augmenter taille du dégradé (pour éviter les lignes claires sur certains écr
   font-family:var(--police-titre);
   font-size:18px;
   color:var(--couleur-accent-feu);
+  white-space:nowrap;
 }
 
 .page-equipe .member-caption-content p{
   margin:0;
   color:var(--couleur-accent-feu);
   font-weight:700;
-  font-size:clamp(12px, 1.05vw, 14px);
+  /* Taille fixe pour éviter que le fond change avec la largeur d'écran */
+  font-size:12px;
+  white-space:nowrap;
 }
 
 /*
