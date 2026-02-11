@@ -1660,7 +1660,7 @@ Augmenter taille du dégradé (pour éviter les lignes claires sur certains écr
   gap:3px;
   text-align:center;
 
-  /* “Nombre de pixels plus grand que le texte” = padding */
+  /* “Nombre de pixels plus grand que le texte” = padding yaaa */
   /* + haut => texte plus bas, + côtés => fond plus large */
   padding:60px 90px 26px;
 
