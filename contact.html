@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spirit of Fire | Contact</title>
+  <link rel="icon" href="assets_home/Logo_fond_beige_visible_edited.png" type="image/png" />
+  <link rel="shortcut icon" href="assets_home/Logo_fond_beige_visible_edited.png" type="image/png" />
+  <link rel="apple-touch-icon" href="assets_home/Logo_fond_beige_visible_edited.png" />
+  <link rel="stylesheet" href="site.css" />
+  <script defer src="site.js"></script>
+</head>
+<body class="home page-contact">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <img src="assets_home/Logo_fond_beige_visible_edited.png" alt="Logo Spirit of Fire" />
+      </a>
+      <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Menu">
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+      </button>
+      <nav class="nav" id="site-nav" aria-label="Navigation principale">
+        <a href="index.html">Accueil</a>
+        <a href="nos-activites.html">Nos activités</a>
+        <a href="notre-equipe.html">Notre équipe</a>
+        <a href="demande-prestations.html">Demande de prestations</a>
+        <a href="galerie.html">Galerie</a>
+        <a class="active" href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="home-fade" aria-label="Contact">
+      <div class="home-fade-top">
+        <div class="container">
+          <div class="home-copy">
+            <h1>Contact</h1>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-fade-bottom">
+        <section class="section">
+          <div class="container">
+            <div class="grid">
+              <div class="card contact-coords">
+                <h2>Coordonnées</h2>
+                <p>
+                  9 Duchaffault<br>
+                  85600, Montaigu-Vendée<br>
+                  <br>
+                  Jean ORIEUX : 07 69 66 74 63<br>
+                  Nathan REMIGEREAU : 07 82 94 55 71
+                </p>
+                <p>
+                  <a class="link-accent" href="mailto:asso.spirit.of.fire@gmail.com">asso.spirit.of.fire@gmail.com</a>
+                </p>
+
+                <div class="footer-social" aria-label="Réseaux sociaux">
+                  <a href="https://www.instagram.com/spiritoffire_/" target="_blank" rel="noreferrer noopener" aria-label="Instagram">
+                    <img src="assets_contact/icons8-instagram-96.png" alt="Instagram" width="28" height="28" />
+                  </a>
+                  <a href="https://www.facebook.com/spiritoffire.asso" target="_blank" rel="noreferrer noopener" aria-label="Facebook">
+                    <img src="assets_contact/icons8-facebook-nouveau-50.png" alt="Facebook" width="28" height="28" />
+                  </a>
+                </div>
+              </div>
+
+              <div class="card span-2 contact-form">
+                <form id="contactForm" class="form" method="post" action="booking.php">
+                  <div class="field">
+                    <label for="name">Nom</label>
+                    <input id="name" name="name" autocomplete="name" />
+                  </div>
+                  <div class="field">
+                    <label for="email">E-mail *</label>
+                    <input id="email" name="email" type="email" autocomplete="email" required />
+                  </div>
+                  <div class="field">
+                    <label for="message">Message *</label>
+                    <textarea id="message" name="message" required></textarea>
+                  </div>
+                  <div class="btn-row">
+                    <button class="btn primary" type="submit">Envoyer</button>
+                    <div id="contactStatus" class="small"></div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-left">
+          <a class="footer-logo-link" href="index.html" aria-label="Retour à l'accueil">
+            <img class="footer-badge" src="assets_home/df5743_e7119a9b4e304467a48b82275d0be52f~mv2.jpg" alt="" width="180" height="64" />
+          </a>
+        </div>
+        <div class="footer-center">
+          <div class="footer-links">
+            <a href="legals_mentions.html">Mentions légales</a>
+          </div>
+          <div class="small footer-copy">© <span id="year"></span> Spirit of Fire</div>
+        </div>
+        <div class="footer-right">
+          <div class="footer-social" aria-label="Réseaux sociaux">
+            <a href="https://www.instagram.com/spiritoffire_/" target="_blank" rel="noreferrer noopener" aria-label="Instagram">
+              <img src="assets_home/insta_logo.png" alt="Instagram" width="28" height="28" />
+            </a>
+            <a href="https://www.facebook.com/spiritoffire.asso" target="_blank" rel="noreferrer noopener" aria-label="Facebook">
+              <img src="assets_home/facebook_logo.png" alt="Facebook" width="28" height="28" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    document.getElementById('contactForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const status = document.getElementById('contactStatus');
+      status.textContent = "Envoi en cours…";
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+
+      if (!email || !message) {
+        status.textContent = 'Merci de remplir les champs obligatoires.';
+        return;
+      }
+
+      const formData = new FormData();
+      formData.set('name', name);
+      formData.set('email', email);
+      formData.set('message', message);
+
+      fetch('booking.php', {
+        method: 'POST',
+        body: formData,
+      })
+        .then(async (res) => {
+          const payload = await res.json().catch(() => null);
+          if (!res.ok) {
+            const msg = payload && payload.error ? payload.error : "Erreur lors de l'envoi.";
+            throw new Error(msg);
+          }
+          return payload;
+        })
+        .then(() => {
+          status.textContent = 'Message envoyé.';
+          e.currentTarget.reset();
+        })
+        .catch((err) => {
+          status.textContent = "Ça n'a pas fonctionné. Envoie ton message à l'adresse mail de l'asso : asso.spirit.of.fire@gmail.com.";
+        });
+    });
+  </script>
+</body>
+</html>

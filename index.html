@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spirit of Fire | Accueil</title>
+  <link rel="icon" href="assets_home/Logo_fond_beige_visible_edited.png" type="image/png" />
+  <link rel="shortcut icon" href="assets_home/Logo_fond_beige_visible_edited.png" type="image/png" />
+  <link rel="apple-touch-icon" href="assets_home/Logo_fond_beige_visible_edited.png" />
+  <link rel="stylesheet" href="site.css" />
+  <script defer src="site.js"></script>
+</head>
+<body class="home home-index">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <img src="assets_home/Logo_fond_beige_visible_edited.png" alt="Logo Spirit of Fire" />
+      </a>
+      <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Menu">
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+      </button>
+      <nav class="nav" id="site-nav" aria-label="Navigation principale">
+        <a class="active" href="index.html">Accueil</a>
+        <a href="nos-activites.html">Nos activités</a>
+        <a href="notre-equipe.html">Notre équipe</a>
+        <a href="demande-prestations.html">Demande de prestations</a>
+        <a href="galerie.html">Galerie</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="home-intro" aria-label="Intro">
+      <div class="home-intro-inner">
+        <img class="home-intro-logo" src="assets_home/Logo_fond_beige_edited.png" alt="Spirit of Fire" />
+      </div>
+    </section>
+
+    <section class="home-fade" aria-label="Accueil">
+      <div class="home-fade-top" aria-label="Bienvenue">
+        <div class="container">
+          <div class="home-copy">
+            <p>
+              Bienvenue sur le site de Spirit of Fire, une association de jongleurs et cracheurs de feu en Vendée créée en 2021.
+            </p>
+            <p>
+              Nos prestations sont sur demande.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-video-block" aria-label="Vidéo">
+        <div class="media-wrap home-video-wrap">
+          <video class="media" data-fallback="1" autoplay muted loop playsinline preload="metadata">
+            <source src="assets_home/presentation_spirit_of_fire.mp4" type="video/mp4" />
+          </video>
+          <div class="placeholder hidden">Vidéo manquante</div>
+        </div>
+      </div>
+      <div class="home-fade-bottom" aria-label="Présentation">
+        <div class="container">
+          <div class="home-copy">
+            <p>
+              Depuis 5 ans, notre association met son expertise au service de vos événements.
+            </p>
+            <p>
+              Des déambulations pour vos marchés de Noël aux spectacles son et lumière avec jongleurs et cracheurs de feu, nous illuminons vos mariages, fêtes, concerts et anniversaires pour en faire des moments inoubliables.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-photos" aria-label="Photos">
+        <div class="container">
+          <div class="home-photos-grid" aria-label="Galerie de 3 photos">
+            <div class="card home-photo-baton">
+              <div class="media-wrap home-photo">
+                <a href="galerie.html" aria-label="Aller à la galerie">
+                  <img class="media" data-fallback="1" src="assets_home/photo_baton.png" alt="Photo bâton" />
+                </a>
+                <div class="placeholder hidden">Image manquante</div>
+              </div>
+            </div>
+            <div class="card home-photo-danseuse">
+              <div class="media-wrap home-photo">
+                <a href="galerie.html" aria-label="Aller à la galerie">
+                  <img class="media" data-fallback="1" src="assets_home/photo_danseuse.jpg" alt="Photo danseuse" />
+                </a>
+                <div class="placeholder hidden">Image manquante</div>
+              </div>
+            </div>
+            <div class="card home-photo-cracheur">
+              <div class="media-wrap home-photo home-photo-large">
+                <a href="galerie.html" aria-label="Aller à la galerie">
+                  <img class="media" data-fallback="1" src="assets_home/photo_cracheur.jpg" alt="Photo cracheur" />
+                </a>
+                <div class="placeholder hidden">Image manquante</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-left">
+          <a class="footer-logo-link" href="index.html" aria-label="Retour à l'accueil">
+            <img class="footer-badge" src="assets_home/Logo_fond_beige_edited.png" alt="" width="180" height="64" />
+          </a>
+        </div>
+
+        <div class="footer-center">
+          <div class="footer-links">
+            <a href="legals_mentions.html">Mentions légales</a>
+          </div>
+          <div class="small footer-copy">© <span id="year"></span> Spirit of Fire</div>
+        </div>
+
+        <div class="footer-right">
+          <div class="footer-social" aria-label="Réseaux sociaux">
+            <a href="https://www.instagram.com/spiritoffire_/" target="_blank" rel="noreferrer noopener" aria-label="Instagram">
+              <img src="assets_home/insta_logo.png" alt="Instagram" width="28" height="28" />
+            </a>
+            <a href="https://www.facebook.com/spiritoffire.asso" target="_blank" rel="noreferrer noopener" aria-label="Facebook">
+              <img src="assets_home/facebook_logo.png" alt="Facebook" width="28" height="28" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

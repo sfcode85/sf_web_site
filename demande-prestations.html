@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spirit of Fire | Demande de prestations</title>
+  <link rel="icon" href="assets_home/Logo_fond_beige_visible_edited.png" type="image/png" />
+  <link rel="shortcut icon" href="assets_home/Logo_fond_beige_visible_edited.png" type="image/png" />
+  <link rel="apple-touch-icon" href="assets_home/Logo_fond_beige_visible_edited.png" />
+  <link rel="stylesheet" href="site.css" />
+  <script defer src="site.js"></script>
+</head>
+<body class="home page-prestations">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <img src="assets_home/Logo_fond_beige_visible_edited.png" alt="Logo Spirit of Fire" />
+      </a>
+      <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Menu">
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+      </button>
+      <nav class="nav" id="site-nav" aria-label="Navigation principale">
+        <a href="index.html">Accueil</a>
+        <a href="nos-activites.html">Nos activités</a>
+        <a href="notre-equipe.html">Notre équipe</a>
+        <a class="active" href="demande-prestations.html">Demande de prestations</a>
+        <a href="galerie.html">Galerie</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="home-fade" aria-label="Demande de prestations">
+      <div class="home-fade-top">
+        <div class="container">
+          <div class="home-copy">
+            <h1>Demande de réservations</h1>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-fade-bottom">
+        <section class="section">
+          <div class="container">
+            <div class="card prestations-form">
+              <form id="bookingForm" class="form" method="post" action="booking.php">
+                <div class="grid grid-2">
+                  <div class="field">
+                    <label for="nom">Nom</label>
+                    <input id="nom" name="nom" autocomplete="family-name" />
+                  </div>
+                  <div class="field">
+                    <label for="prenom">Prénom</label>
+                    <input id="prenom" name="prenom" autocomplete="given-name" />
+                  </div>
+
+                  <div class="field span-2">
+                    <label for="orga">Dénomination de l'organisation</label>
+                    <input id="orga" name="organisation" autocomplete="organization" />
+                  </div>
+
+                  <div class="field">
+                    <label for="email">E-mail *</label>
+                    <input id="email" name="email" type="email" required pattern="^.+@.+\.[a-zA-Z]{2,63}$" autocomplete="email" />
+                  </div>
+                  <div class="field">
+                    <label for="tel">N° de téléphone *</label>
+                    <input id="tel" name="telephone" type="tel" required autocomplete="tel" />
+                  </div>
+
+                  <div class="field">
+                    <label for="date">Date de l'événement *</label>
+                    <input id="date" name="date" type="date" required />
+                  </div>
+                  <div class="field">
+                    <label for="lieu">Lieu de l'événement *</label>
+                    <input id="lieu" name="lieu" required />
+                  </div>
+
+                  <div class="field span-2">
+                    <label for="details">Détails de la demande</label>
+                    <textarea id="details" name="details"></textarea>
+                  </div>
+                </div>
+
+                <div class="btn-row">
+                  <button class="btn primary" type="submit">Envoyer</button>
+                  <div id="bookingStatus" class="small"></div>
+                </div>
+
+                <div id="bookingThanks" class="card prestations-thanks hidden notice">
+                  Merci pour votre demande ! Nous vous recontacterons au plus vite :)
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-left">
+          <a class="footer-logo-link" href="index.html" aria-label="Retour à l'accueil">
+            <img class="footer-badge" src="assets_home/df5743_e7119a9b4e304467a48b82275d0be52f~mv2.jpg" alt="" width="180" height="64" />
+          </a>
+        </div>
+
+        <div class="footer-center">
+          <div class="footer-links">
+            <a href="legals_mentions.html">Mentions légales</a>
+          </div>
+          <div class="small footer-copy">© <span id="year"></span> Spirit of Fire</div>
+        </div>
+
+        <div class="footer-right">
+          <div class="footer-social" aria-label="Réseaux sociaux">
+            <a href="https://www.instagram.com/spiritoffire_/" target="_blank" rel="noreferrer noopener" aria-label="Instagram">
+              <img src="assets_home/insta_logo.png" alt="Instagram" width="28" height="28" />
+            </a>
+            <a href="https://www.facebook.com/spiritoffire.asso" target="_blank" rel="noreferrer noopener" aria-label="Facebook">
+              <img src="assets_home/facebook_logo.png" alt="Facebook" width="28" height="28" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    document.getElementById('bookingForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const status = document.getElementById('bookingStatus');
+      const thanks = document.getElementById('bookingThanks');
+      status.textContent = "Envoi en cours…";
+      thanks.classList.add('hidden');
+
+      const form = e.currentTarget;
+      const formData = new FormData(form);
+
+      fetch(form.action, {
+        method: 'POST',
+        body: formData,
+      })
+        .then(async (res) => {
+          const payload = await res.json().catch(() => null);
+          if (!res.ok) {
+            const message = payload && payload.error ? payload.error : "Erreur lors de l'envoi.";
+            throw new Error(message);
+          }
+          return payload;
+        })
+        .then(() => {
+          thanks.classList.remove('hidden');
+          status.textContent = 'Demande envoyée.';
+          form.reset();
+        })
+        .catch((err) => {
+          status.textContent = "Ça n'a pas fonctionné. Envoie ta demande à l'adresse mail de l'asso : asso.spirit.of.fire@gmail.com.";
+        });
+    });
+  </script>
+</body>
+</html>

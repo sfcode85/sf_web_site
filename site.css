@@ -1,0 +1,1995 @@
+/*
+  ==============================================================
+  Spirit of Fire — site.css
+  ==============================================================
+
+  BUT : ce fichier contient TOUT le style du site.
+  Pour modifier facilement, utilise la recherche (Ctrl+F) avec :
+
+  - "=== THÈME"     : couleurs + polices (variables CSS)
+  - "=== HEADER"    : barre du haut (logo + menu)
+  - "=== HERO"      : grand encart des pages internes
+  - "=== BOUTONS"   : boutons (CTA)
+  - "=== CARTES"    : styles des blocs (.card)
+  - "=== MEDIA"     : images/vidéos + placeholder
+  - "=== ACCUEIL"   : page d'accueil (logo intro + vidéo + textes + photos)
+  - "=== FORM"      : champs de formulaire
+  - "=== FOOTER"    : bas de page
+
+  NOTE :
+  - Les couleurs ne sont (quasi) jamais écrites en dur : elles viennent de :root.
+  - Les unités importantes :
+    * var(--espace-*) : espacements
+    * var(--rayon*)   : arrondis
+    * clamp(...)      : taille responsive automatique
+*/
+
+/*
+  === POLICE TITRES ===
+  Police utilisée sur h1/h2/h3 (EDO).
+  Si tu changes de police, modifie plutôt --police-titre dans :root.
+*/
+@font-face{
+  font-family:"EDO";
+  src:
+    url("CASmut-Fill.otf") format("opentype"),
+    url("fonts/EDO.woff2") format("woff2"),
+    url("fonts/EDO.ttf") format("truetype");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+
+/*
+  === POLICE TEXTE ===
+  Police utilisée pour le texte courant (paragraphes, menus, etc.).
+  Fichier présent dans le projet : SF/Georgia.ttf
+
+  IMPORTANT :
+  - Si tu préfères utiliser la Georgia "système" (déjà installée sur l'ordi),
+    tu peux supprimer ce @font-face : le fallback "Georgia" fonctionnera.
+*/
+@font-face{
+  font-family:"Georgia";
+  src:url("Georgia.ttf") format("truetype");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+
+/*
+  Police ajoutée : Quicksand (texte du site)
+  Fichier : SF/Quicksand-Light.ttf
+  Si tu ajoutes d'autres graisses (Regular/Bold), on pourra étendre font-weight.
+*/
+@font-face{
+  font-family:"Quicksand";
+  src:url("Quicksand-Light.ttf") format("truetype");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+/*
+  === THÈME (variables globales) ===
+  Tout le site se pilote ici.
+  Astuce : pour changer le look du site rapidement, modifie les 6 lignes
+  "TEXTE À TROUS".
+*/
+:root{
+  /* TEXTE À TROUS — change ces 6 lignes pour modifier tout le thème */
+  --couleur-fond-page: #000000;
+  --couleur-texte-principal: #f4f7ff;
+  --couleur-accent-feu: #95000C;
+  --couleur-accent-feu-2: #ede0d4;
+  --police-titre: "EDO", ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;
+  /* Police de texte du site (modifiable) */
+  --police-texte: "Quicksand", system-ui, -apple-system, Segoe UI, Roboto, Arial, "Georgia", serif;
+
+  /* Accueil : couleurs de la zone d'intro (fond beige + texte noir) */
+  --couleur-intro-fond: #ede0d4;
+  --couleur-intro-texte: #000000;
+
+  /* Header : barre du haut (fond, texte, rouge accent) */
+  --couleur-header-fond-plein: #ede0d4;
+  --couleur-header-texte: #111111;
+  --couleur-header-rouge: #95000C;
+  --couleur-header-texte-survol: var(--couleur-blanc);
+  --couleur-header-bordure: #ede0d4;
+  --couleur-header-chip: transparent;
+  --couleur-header-chip-survol: transparent;
+  --couleur-header-chip-actif: transparent;
+
+  /* Couleurs dérivées (surfaces, secondaires, bordures, ombres) */
+  --couleur-surface: color-mix(in oklab, var(--couleur-fond-page), white 7%);
+  --couleur-surface-2: color-mix(in oklab, var(--couleur-fond-page), white 10%);
+  --couleur-texte-secondaire: color-mix(in oklab, var(--couleur-texte-principal), var(--couleur-fond-page) 35%);
+
+  --couleur-noir: #000000;
+  --couleur-blanc: #ffffff;
+
+  --couleur-bordure: color-mix(in oklab, var(--couleur-texte-principal), transparent 88%);
+  --couleur-bordure-forte: color-mix(in oklab, var(--couleur-texte-principal), transparent 82%);
+  --couleur-chip: color-mix(in oklab, var(--couleur-texte-principal), transparent 92%);
+  --couleur-chip-survol: color-mix(in oklab, var(--couleur-texte-principal), transparent 88%);
+
+  --couleur-header-fond: color-mix(in oklab, var(--couleur-surface), transparent 26%);
+  --couleur-header-fond-survol: color-mix(in oklab, var(--couleur-surface), transparent 14%);
+
+  --couleur-ombre-1: color-mix(in oklab, var(--couleur-noir), transparent 62%);
+  --couleur-ombre-2: color-mix(in oklab, var(--couleur-noir), transparent 45%);
+
+  --degrade-surface: linear-gradient(180deg,
+      color-mix(in oklab, var(--couleur-texte-principal), transparent 94%),
+      color-mix(in oklab, var(--couleur-texte-principal), transparent 97%));
+
+  --degrade-bouton: linear-gradient(135deg,
+      color-mix(in oklab, var(--couleur-accent-feu), var(--couleur-noir) 12%),
+      color-mix(in oklab, var(--couleur-accent-feu-2), var(--couleur-noir) 22%));
+
+  --degrade-hero: radial-gradient(1100px 700px at 20% 15%, color-mix(in oklab, var(--couleur-accent-feu), transparent 70%) 0%, transparent 60%),
+                 radial-gradient(900px 650px at 85% 10%, color-mix(in oklab, var(--couleur-accent-feu-2), transparent 72%) 0%, transparent 62%),
+                 linear-gradient(180deg, transparent 0%, var(--couleur-fond-page) 75%);
+
+  --degrade-home-fade: linear-gradient(180deg,
+      var(--couleur-intro-fond) 0%,
+      color-mix(in oklab, var(--couleur-intro-fond), var(--couleur-fond-page) 26%) 28%,
+      var(--couleur-fond-page) 100%);
+
+  /* Layout : largeur max, hauteur du header, rayons, cadre des médias */
+  --max-largeur: 1120px;
+  --hauteur-header: 86px;
+  --rayon: 18px;
+  --rayon-petit: 14px;
+  --rayon-tres-petit: 12px;
+  --cadre-media: 4px;
+  --couleur-cadre-media: var(--couleur-noir);
+  --image-max-largeur: 760px;
+
+  /* Espacements : utilisés partout (padding/margin/gap) */
+  --espace-1: 6px;
+  --espace-2: 10px;
+  --espace-3: 14px;
+  --espace-4: 18px;
+  --espace-5: 24px;
+  --espace-6: 32px;
+  --espace-7: 44px;
+  --espace-8: 64px;
+  --espace-9: 88px;
+  --espace-10: 120px;
+  --espace-11: 160px;
+  --epsace-12: 220px;
+
+  /* Effets / animation : transitions, ombres, focus */
+  --flou-header: 12px;
+  --transition-standard: all 0.3s ease;
+  --ombre-1: 0 10px 28px var(--couleur-ombre-1);
+  --ombre-2: 0 18px 52px var(--couleur-ombre-2);
+  --couleur-focus: color-mix(in oklab, var(--couleur-accent-feu), var(--couleur-blanc) 22%);
+
+  /* HERO : page interne avec gros encart */
+  --hero-min-hauteur: 100vh;
+  --hero-min-hauteur-mobile: 100svh;
+  --hero-media-min: 320px;
+  --hero-media-max: 520px;
+
+  /* ACCUEIL : intro logo + animation */
+  --home-logo-taille: clamp(260px, 44vw, 840px);
+  --home-intro-rise: 100px;
+  --home-ease: cubic-bezier(.2,.8,.2,1);
+}
+
+/*
+  === BASE / RESET ===
+  - box-sizing pour un sizing prévisible
+  - body : typo + couleurs + background
+*/
+*{box-sizing:border-box}
+html,body{height:100%}
+
+/*
+  Anti "scroll horizontal" :
+  Certaines sections utilisent du full-bleed (ex: vidéo en 100vw).
+  Selon le navigateur, 100vw peut inclure la largeur de la scrollbar et créer
+  un léger débordement -> on peut faire défiler de droite à gauche.
+*/
+@supports (overflow: clip){
+  html{overflow-x:clip;}
+}
+
+@supports not (overflow: clip){
+  html{overflow-x:hidden;}
+}
+
+body{
+  margin:0;
+  font-family:var(--police-texte);
+  color:var(--couleur-texte-principal);
+  background:var(--couleur-fond-page);
+  line-height:1.55;
+  text-rendering:optimizeLegibility;
+}
+
+/* Titres : police EDO (voir @font-face + --police-titre) */
+h1,h2,h3{font-family:var(--police-titre)}
+
+/* Page "Mentions Légales et Politique de Confidentialité" : fond beige + texte noir + police simple */
+.page-legal{
+  background:var(--couleur-intro-fond);
+  color:var(--couleur-intro-texte);
+}
+
+.page-legal main{background:transparent;}
+
+.page-legal .card{
+  background:transparent;
+  background-image:none;
+  border:0;
+  box-shadow:none;
+}
+
+.page-legal .card:hover{
+  transform:none;
+  box-shadow:none;
+  border-color:transparent;
+}
+
+/* Pas d'animations / pas de contours visibles sur cette page */
+.page-legal *{transition:none !important;}
+.page-legal a:hover,
+.page-legal .btn:hover,
+.page-legal .footer-links a:hover{transform:none !important; box-shadow:none !important; filter:none !important;}
+
+.page-legal a:focus-visible,
+.page-legal button:focus-visible,
+.page-legal input:focus-visible,
+.page-legal textarea:focus-visible{
+  outline:none;
+  outline-offset:0;
+}
+
+/* Pas de dégradé d'arrivée du footer sur cette page */
+.page-legal .site-footer::before{content:none; display:none;}
+
+.page-legal .section p,
+.page-legal .section li,
+.page-legal .small{
+  color:var(--couleur-intro-texte);
+}
+
+/* Titres en police du texte, juste plus grands et gras */
+.page-legal h1,
+.page-legal h2,
+.page-legal h3{
+  font-family:var(--police-texte) !important;
+  font-weight:900;
+  letter-spacing:0;
+}
+
+/* Override explicite des titres dans les cartes (sinon .card h1/h2/h3 peut gagner) */
+.page-legal .card h1,
+.page-legal .card h2,
+.page-legal .card h3{
+  font-family:var(--police-texte) !important;
+}
+
+.page-legal h1{font-size:clamp(28px, 3.2vw, 44px);}
+.page-legal h2{font-size:clamp(18px, 1.8vw, 24px);}
+.page-legal h3{font-size:clamp(16px, 1.4vw, 20px);}
+
+/* Accueil : force un fond noir (utile pour la section vidéo/photos) */
+.home{--couleur-fond-page: var(--couleur-noir);}
+
+/* Images/Vidéos : comportement par défaut */
+img,video{max-width:100%;height:auto}
+
+/* Liens : héritent la couleur du texte (pas de bleu par défaut) */
+a{color:inherit}
+
+/*
+  === ACCESSIBILITÉ : FOCUS CLAVIER ===
+  Affiche un contour quand on navigue au clavier (Tab).
+*/
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible{
+  outline:2px solid var(--couleur-focus);
+  outline-offset:2px;
+}
+
+/*
+  === CONTAINER ===
+  Largeur max commune et marges latérales.
+*/
+.container{
+  width:min(var(--max-largeur), calc(100% - (var(--espace-5) * 2)));
+  margin:0 auto;
+}
+
+/* Helper : cache un élément (utilisé pour placeholder / fallback) */
+.hidden{display:none !important;}
+
+/*
+  === HEADER ===
+  Barre fixe en haut (logo + menu).
+  Comportement :
+  - Fixe (position: fixed)
+  - Se cache/affiche au scroll via JS (classe .is-hidden)
+*/
+.site-header{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:50;
+  background:var(--couleur-header-fond-plein);
+  color:var(--couleur-header-texte);
+  font-family:var(--police-titre);
+  border-bottom:1px solid var(--couleur-header-bordure);
+  transition:transform 1500ms var(--home-ease);
+  transform:translateY(0px);
+}
+
+.site-header.is-hidden{transform:translateY(-110%)}
+
+/* Structure interne du header : 3 colonnes (logo / nav / vide) */
+.header-inner{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:var(--espace-3);
+  padding:var(--espace-3) 0;
+}
+
+/* Bouton hamburger (visible seulement en mobile) */
+.nav-toggle{
+  display:none;
+  align-items:center;
+  justify-content:center;
+  width:44px;
+  height:44px;
+  padding:0;
+  border:0;
+  border-radius:var(--rayon-petit);
+  background:transparent;
+  color:var(--couleur-header-texte);
+  cursor:pointer;
+}
+
+.nav-toggle:hover{color:var(--couleur-header-rouge)}
+
+/* Les 3 barres du hamburger */
+.nav-toggle-bars{
+  width:22px;
+  height:2px;
+  background:currentColor;
+  position:relative;
+  display:block;
+}
+
+.nav-toggle-bars::before,
+.nav-toggle-bars::after{
+  content:"";
+  position:absolute;
+  left:0;
+  width:22px;
+  height:2px;
+  background:currentColor;
+}
+
+.nav-toggle-bars::before{top:-7px}
+.nav-toggle-bars::after{top:7px}
+
+/* Logo (lien) dans le header */
+.brand{
+  display:flex;
+  align-items:center;
+  gap:var(--espace-2);
+  text-decoration:none;
+  min-width:max-content;
+}
+
+.brand img{
+  width:56px;
+  height:56px;
+  object-fit:cover;
+  border-radius:var(--rayon-petit);
+  border:0;
+  background:transparent;
+  box-shadow:none;
+}
+
+.brand .title{
+  font-family:var(--police-titre);
+  font-weight:900;
+  letter-spacing:.5px;
+}
+
+/*
+  Menu principal (desktop)
+  - Aligné au centre
+  - Les liens sont des "chips" (fond transparent ici)
+*/
+.nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:var(--espace-2);
+  align-items:center;
+  justify-content:center;
+  justify-self:center;
+}
+
+.brand{
+  justify-self:end;
+}
+
+.nav a{
+  text-decoration:none;
+  padding:10px 12px;
+  border-radius:var(--rayon-petit);
+  color:var(--couleur-header-texte);
+  background:var(--couleur-header-chip);
+  border:0;
+  transition:var(--transition-standard);
+}
+
+.nav a:hover{
+  transform:none;
+  background:transparent;
+  color:var(--couleur-header-rouge);
+  box-shadow:none;
+}
+.nav a:active{transform:none}
+.nav a.active{
+  background:transparent;
+  color:var(--couleur-header-rouge);
+  font-weight:800;
+}
+
+/*
+  Menu mobile
+  - Le hamburger apparaît
+  - Le menu devient un panneau déroulant
+  Ouverture via JS : body.nav-open
+*/
+@media (max-width: 900px){
+  .header-inner{
+    grid-template-columns:auto 1fr auto;
+    align-items:center;
+  }
+
+  .brand{justify-self:start; grid-column:1}
+  .nav-toggle{display:inline-flex; justify-self:end; grid-column:3}
+
+  .nav{
+    display:none;
+    position:absolute;
+    top:100%;
+    right:0;
+    left:auto;
+    width:min(360px, 86vw);
+    max-height:calc(100vh - var(--hauteur-header));
+    overflow:auto;
+    padding:var(--espace-3) var(--espace-5) var(--espace-4);
+    gap:var(--espace-2);
+    flex-direction:column;
+    align-items:stretch;
+    background:var(--couleur-header-fond-plein);
+    border-radius:0;
+  }
+
+  body.nav-open .nav{display:flex}
+
+  .nav a{
+    padding:12px 10px;
+    text-align:left;
+  }
+}
+
+/* Ajustement d'ordre (sécurité pour certains navigateurs / layouts) */
+.nav{order:1}
+
+/*
+  === HERO (pages internes) ===
+  Structure HTML typique :
+  .hero > .container > .hero-card > .hero-grid
+    - .hero-copy (texte + boutons)
+    - .media-wrap.hero-media (image/vidéo)
+*/
+.hero{
+  position:relative;
+  min-height:var(--hero-min-hauteur);
+  min-height:var(--hero-min-hauteur-mobile);
+  display:grid;
+  align-items:stretch;
+  padding:var(--espace-6) 0;
+}
+
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:var(--degrade-hero);
+  pointer-events:none;
+}
+
+.hero > .container{position:relative; z-index:1; display:grid; align-items:stretch}
+
+.hero-card{
+  background:var(--couleur-surface);
+  background-image:var(--degrade-surface);
+  border-radius:calc(var(--rayon) + 4px);
+  border:1px solid var(--couleur-bordure);
+  box-shadow:var(--ombre-2);
+  overflow:hidden;
+  min-height:calc(var(--hero-min-hauteur) - (var(--espace-6) * 2));
+}
+
+.hero-grid{
+  height:100%;
+  display:grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap:0;
+}
+
+@media (max-width: 900px){
+  .hero{padding:var(--espace-5) 0}
+  .hero-card{min-height:auto}
+  .hero-grid{grid-template-columns:1fr}
+}
+
+.hero-copy{
+  padding:clamp(var(--espace-4), 3vw, var(--espace-7));
+  display:grid;
+  align-content:center;
+  justify-items:center;
+  gap:var(--espace-3);
+  text-align:center;
+}
+
+/* Titre principal du hero */
+.hero-copy h1{
+  margin:0;
+  font-family:var(--police-titre);
+  font-weight:950;
+  letter-spacing:.2px;
+  font-size:clamp(34px, 4vw, 52px);
+  line-height:1.05;
+}
+
+/* Texte descriptif sous le titre du hero */
+.hero-copy p{
+  margin:0;
+  color:var(--couleur-texte-secondaire);
+  font-size:clamp(15px, 1.35vw, 18px);
+  max-width:62ch;
+}
+
+/*
+  === BOUTONS ===
+  Utilisés sur tout le site.
+  - .btn.primary : bouton principal (dégradé)
+*/
+.btn-row{display:flex; gap:var(--espace-2); flex-wrap:wrap; align-items:center; justify-content:center}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:var(--espace-2);
+  padding:12px 16px;
+  border-radius:var(--rayon-petit);
+  text-decoration:none;
+  border:1px solid var(--couleur-bordure);
+  background:var(--couleur-chip);
+  color:var(--couleur-texte-principal);
+  cursor:pointer;
+  transition:var(--transition-standard);
+  user-select:none;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--ombre-1);
+  background:var(--couleur-chip-survol);
+  border-color:var(--couleur-bordure-forte);
+}
+
+.btn:active{transform:translateY(0px) scale(.99)}
+
+.btn.primary{
+  background:var(--degrade-bouton);
+  border-color:color-mix(in oklab, var(--couleur-accent-feu), transparent 35%);
+}
+
+.btn.primary:hover{filter:saturate(1.12)}
+
+/* Boutons "Envoyer" en rouge sur Contact + Prestations */
+.page-contact .btn.primary,
+.page-prestations .btn.primary{
+  background:var(--couleur-accent-feu);
+  background-image:none;
+  border-color:var(--couleur-accent-feu);
+  color:var(--couleur-blanc);
+}
+
+/* Liens d'accent */
+.link-accent{
+  color:var(--couleur-accent-feu);
+  font-weight:850;
+  text-decoration:none;
+  transition:var(--transition-standard);
+}
+
+.link-accent:hover{filter:saturate(1.1); text-decoration:underline}
+
+/*
+  === STRUCTURE PAGES ===
+  main : padding top = hauteur du header fixe (évite que le contenu passe dessous).
+  .home main : page d'accueil gère ses propres paddings.
+*/
+main{padding:calc(var(--espace-2) + var(--hauteur-header)) 0 var(--espace-8)}
+.home main{padding:0 0 var(--espace-8)}
+.section{padding:var(--espace-6) 0}
+
+.section h2{
+  margin:0 0 var(--espace-2);
+  font-family:var(--police-titre);
+  font-size:clamp(22px, 2.2vw, 28px);
+}
+
+.section p{margin:0 0 var(--espace-3); color:var(--couleur-texte-secondaire)}
+
+/*
+  === GRILLES ===
+  .grid : grille 3 colonnes (cartes) sur desktop, 1 colonne en mobile.
+  .grid.grid-2 : version 2 colonnes.
+*/
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:var(--espace-3);
+}
+
+.grid.grid-2{grid-template-columns:repeat(2, 1fr)}
+
+@media (max-width: 980px){
+  .grid{grid-template-columns:1fr}
+  .grid.grid-2{grid-template-columns:1fr}
+}
+
+.span-2{grid-column:span 2}
+
+@media (max-width: 980px){
+  .span-2{grid-column:auto}
+}
+
+/*
+  === CARTES ===
+  Conteneur standard (fond + bordure + ombre).
+  Utilisé pour les blocs de contenu.
+*/
+.card{
+  background:var(--couleur-surface);
+  background-image:var(--degrade-surface);
+  border-radius:var(--rayon);
+  border:1px solid var(--couleur-bordure);
+  box-shadow:var(--ombre-1);
+  padding:var(--espace-4);
+  transition:var(--transition-standard);
+}
+
+.card:hover{
+  transform:translateY(-5px);
+  box-shadow:var(--ombre-2);
+  border-color:var(--couleur-bordure-forte);
+}
+
+.card h1,.card h2,.card h3{margin-top:0; font-family:var(--police-titre)}
+
+/*
+  === MEDIA (images / vidéos) ===
+  Pattern HTML :
+    <div class="media-wrap ...">
+      <img|video class="media" data-fallback="1" ...>
+      <div class="placeholder hidden">...</div>
+    </div>
+
+  - .media-wrap : le cadre/arrondi/ombre
+  - .media      : l'image/vidéo elle-même
+  - .placeholder: texte affiché si le média est manquant
+
+  Important :
+  - Par défaut, .media est en object-fit: cover (remplit le cadre MAIS rogne).
+  - Sur la page d'accueil (photos du bas), on surcharge en object-fit: contain
+    pour éviter le rognage.
+*/
+.media-wrap{
+  position:relative;
+  border-radius:calc(var(--rayon) - 2px);
+  overflow:hidden;
+  border:var(--cadre-media) solid var(--couleur-cadre-media);
+  background:var(--couleur-surface-2);
+  box-shadow:var(--ombre-1);
+}
+
+/* Format 16/9 (utile pour vidéos) */
+.media-wrap.slim{aspect-ratio: 16/9}
+
+.media-wrap.hero-media{
+  min-height:clamp(var(--hero-media-min), 40vh, var(--hero-media-max));
+}
+
+.media-wrap.wide{
+  max-width:var(--image-max-largeur);
+  margin:0 auto;
+}
+
+.media{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+}
+
+/* Vidéos : fondu au scroll (JS ajoute/retire .is-inview) */
+.media-wrap.video-fade{
+  opacity:0;
+  transform:translateY(18px);
+  transition:opacity 700ms ease, transform 700ms ease;
+  will-change:opacity, transform;
+}
+
+.media-wrap.video-fade.is-inview{
+  opacity:1;
+  transform:none;
+}
+
+.placeholder{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:var(--espace-4);
+  min-height:160px;
+  background:var(--couleur-surface-2);
+  color:var(--couleur-texte-principal);
+  font-weight:800;
+}
+
+/*
+  === ACCUEIL : INTRO LOGO (plein écran) ===
+  Section beige avec le gros logo.
+  L'animation est déclenchée en JS : body reçoit la classe .is-loaded.
+  (Voir SF/site.js)
+*/
+.home-intro{
+  min-height:100svh;
+  background:var(--couleur-intro-fond);
+  color:var(--couleur-intro-texte);
+  display:grid;
+  place-items:center;
+  padding:calc(var(--espace-7) + var(--hauteur-header)) var(--espace-5) var(--espace-7);
+}
+
+.home-intro-inner{
+  display:grid;
+  place-items:center;
+  gap:var(--espace-3);
+}
+
+.home-intro-logo{
+  width:var(--home-logo-taille);
+  max-width:90vw;
+  height:auto;
+  border-radius:0;
+  border:0;
+  box-shadow:none;
+  background:transparent;
+  margin-top: -200px;
+}
+
+.home-intro-title{
+  font-family:var(--police-titre);
+  font-weight:950;
+  letter-spacing:.6px;
+  font-size:clamp(28px, 3.5vw, 44px);
+}
+
+.home-intro-subtitle{
+  font-weight:700;
+  color:color-mix(in oklab, var(--couleur-intro-texte), transparent 22%);
+}
+
+.home-intro-hint{
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+  color:color-mix(in oklab, var(--couleur-intro-texte), transparent 36%);
+  margin-top:var(--espace-4);
+}
+
+.home-intro-logo,
+.home-intro-title,
+.home-intro-subtitle,
+.home-intro-hint{
+  opacity:0;
+  transform:translateY(var(--home-intro-rise));
+}
+
+/* Animation d'apparition (logo qui remonte + fade-in) */
+.home.is-loaded .home-intro-logo{animation:home-rise-fade 4000ms var(--home-ease) forwards}
+
+
+@keyframes home-rise-fade{
+  to{opacity:1; transform:translateY(0px)}
+}
+
+.home-fade{
+  background:var(--couleur-noir);
+  padding:0;
+}
+
+/* Accueil : dégradé + textes blancs (sans "carte") */
+/*
+  === ACCUEIL : TEXTES AUTOUR DE LA VIDÉO ===
+  Modifie ici :
+  - Espacement haut (sous le header) : padding de .home-fade-top
+  - Taille du texte : font-size dans .home-copy p
+  - Centrage : text-align dans .home-copy
+
+Augmenter taille du dégradé (pour éviter les lignes claires sur certains écrans) : padding de .home-fade-bottom
+*/
+.home-fade-top{
+  background:var(--degrade-home-fade);
+  padding:calc(var(--hauteur-header) - var(--espace-4)) 0 var(--espace-2);
+  height: clamp(400px, 50vh, 600px);
+}
+
+/* Accueil : texte de bienvenue vraiment centré dans le dégradé */
+.home-index .home-fade-top{
+  display:flex;
+  align-items:flex-start;
+  padding:calc(var(--hauteur-header) + var(--espace-3)) 0 var(--espace-4);
+}
+
+/* Pages internes : commence le dégradé après le header fixe
+   (évite la démarquation au niveau du bandeau du haut) */
+.home:not(.home-index) .home-fade-top{
+  background:linear-gradient(180deg,
+    var(--couleur-header-fond-plein) 0,
+    var(--couleur-header-fond-plein) var(--hauteur-header),
+    color-mix(in oklab, var(--couleur-header-fond-plein), var(--couleur-fond-page) 26%) 46%,
+    var(--couleur-fond-page) 100%);
+
+  display:flex;
+  align-items:center;
+  padding:var(--hauteur-header) 0 0;
+  height:clamp(240px, 34vh, 420px);
+}
+
+.home:not(.home-index) .home-fade-top > .container{width:100%;}
+
+.home-fade-bottom{
+  padding:var(--espace-6) 0 var(--espace-6);
+  background:var(--couleur-noir);
+}
+
+.home-copy{
+  max-width:880px;
+  margin:0 auto;
+  text-align:center;
+}
+
+.home-copy p{
+  margin:0 0 var(--espace-3);
+  color:var(--couleur-blanc);
+  font-weight:600;
+  font-size:clamp(16px, 1.25vw, 20px);
+}
+
+.home-copy p:last-child{margin-bottom:0;}
+
+/* Page "Nos activités" : titre plus grand dans le dégradé + texte plus haut sur la zone noire */
+.page-activites .home-fade-top .home-copy h1{
+  margin:0;
+  font-family:var(--police-titre);
+  font-weight:950;
+  letter-spacing:.2px;
+  font-size:clamp(44px, 6vw, 74px);
+  line-height:1.05;
+}
+
+/* Page "Demande de réservations" : même style que "Nos activités" pour le titre */
+.page-prestations .home-fade-top .home-copy h1{
+  margin:0;
+  font-family:var(--police-titre);
+  font-weight:950;
+  letter-spacing:.2px;
+  font-size:clamp(44px, 6vw, 74px);
+  line-height:1.05;
+}
+
+/* Page "Notre équipe" : même style que "Nos activités" pour le titre */
+.page-equipe .home-fade-top .home-copy h1{
+  margin:0;
+  font-family:var(--police-titre);
+  font-weight:950;
+  letter-spacing:.2px;
+  font-size:clamp(44px, 6vw, 74px);
+  line-height:1.05;
+}
+
+/* Page "Notre équipe" : paragraphe d'intro aligné comme sur "Nos activités" */
+.page-equipe .home-fade-top .home-copy p{
+  text-align:justify;
+  text-justify:inter-word;
+}
+
+/* Page "Notre équipe" : remonte le contenu de la zone noire (comme activités) */
+.page-equipe .home-fade-bottom > .section:first-child{padding-top:0;}
+
+/* Page "Notre équipe" : style texte (sans toucher aux légendes des membres) */
+.page-equipe .home-fade-bottom > .section > .container > p{
+  text-align:justify;
+  text-justify:inter-word;
+  color:var(--couleur-blanc);
+  font-weight:600;
+  font-size:clamp(16px, 1.25vw, 20px);
+}
+
+/* Page "Galerie" : même style que "Nos activités" pour le titre */
+.page-galerie .home-fade-top .home-copy h1{
+  margin:0;
+  font-family:var(--police-titre);
+  font-weight:950;
+  letter-spacing:.2px;
+  font-size:clamp(44px, 6vw, 74px);
+  line-height:1.05;
+}
+
+/* Page "Contact" : même style que "Nos activités" pour le titre */
+.page-contact .home-fade-top .home-copy h1{
+  margin:0;
+  font-family:var(--police-titre);
+  font-weight:950;
+  letter-spacing:.2px;
+  font-size:clamp(44px, 6vw, 74px);
+  line-height:1.05;
+}
+
+/* Page "Contact" : remonte le contenu (formulaire + coordonnées) */
+.page-contact .home-fade-top{
+  height:clamp(200px, 30vh, 320px);
+  padding:var(--hauteur-header) 0 var(--espace-2);
+}
+
+.page-contact .home-fade-bottom > .section:first-child{
+  padding-top:0;
+}
+
+.page-activites .home-fade-bottom > .section:first-child{padding-top:0;}
+
+.page-activites .home-fade-bottom p{
+  text-align:justify;
+  text-justify:inter-word;
+  color:var(--couleur-blanc);
+  font-weight:600;
+  font-size:clamp(16px, 1.25vw, 20px);
+}
+
+.page-activites .activity-intro{
+  max-width:none;
+  width:100%;
+  margin:0;
+}
+
+.page-activites .activity-rows{
+  display:flex;
+  flex-direction:column;
+  gap:var(--espace-6);
+}
+
+.page-activites .activity-row{
+  display:flex;
+  gap:var(--espace-6);
+  align-items:center;
+}
+
+.page-activites .activity-row.reverse{flex-direction:row-reverse;}
+
+.page-activites .activity-media{flex:1.35;}
+.page-activites .activity-text{flex:.65;}
+
+.page-activites .activity-text p{
+  margin:0;
+}
+
+/* Activités : vidéo Jonglage en full-bleed (jusqu'au bord gauche) */
+.page-activites .activity-row-fullbleed{
+  /* Sort du .container et prend toute la largeur de l'écran */
+  width:100vw;
+  width:100dvw;
+  max-width:100vw;
+  max-width:100dvw;
+  margin-left:calc(50% - 50vw);
+  margin-left:calc(50% - 50dvw);
+
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:0;
+  align-items:stretch;
+}
+
+.page-activites .activity-media-fullbleed{
+  width:100%;
+  margin:0;
+}
+
+/* Page "Nos activités" : section full-width "Héritage" + bouton teaser rouge */
+.page-activites .spectacle-heritage-fullbleed{
+  width:100vw;
+  width:100dvw;
+  max-width:100vw;
+  max-width:100dvw;
+  margin-left:calc(50% - 50vw);
+  margin-left:calc(50% - 50dvw);
+}
+
+.page-activites .spectacle-heritage-inner{
+  width:min(var(--max-largeur), calc(100% - (var(--espace-5) * 2)));
+  margin:0 auto;
+  padding:var(--espace-7) 0;
+  text-align:center;
+}
+
+.page-activites .spectacle-heritage-text{
+  width:100%;
+  max-width:900px;
+  margin:0 auto var(--espace-7);
+  text-align:center;
+}
+
+.page-activites p.spectacle-heritage-text{
+  text-align:center;
+}
+
+.page-activites .btn.btn-heritage-teaser{
+  background:var(--couleur-accent-feu);
+  border-color:color-mix(in oklab, var(--couleur-accent-feu), transparent 30%);
+  color:var(--couleur-blanc);
+  padding:16px 24px;
+  font-size:clamp(16px, 1.4vw, 19px);
+  font-weight:700;
+}
+
+.page-activites .btn.btn-heritage-teaser:hover{
+  background:color-mix(in oklab, var(--couleur-accent-feu), white 8%);
+  border-color:color-mix(in oklab, var(--couleur-accent-feu), transparent 10%);
+}
+
+.page-activites .activity-row-fullbleed .activity-text{
+  /* Aligne le texte comme un .container (marges latérales identiques) */
+  --activity-gutter: calc(
+    (100vw - min(var(--max-largeur), calc(100vw - (var(--espace-5) * 2)))) / 2
+  );
+  padding:0 var(--activity-gutter) 0 var(--espace-6);
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+/* Espace renforcé entre Jonglage et Arts du feu */
+.page-activites .activity-row-fullbleed{
+  margin-bottom:calc(var(--espace-1) + var(--espace-1));
+}
+
+/* Activités : vidéo Arts du feu en full-bleed à droite (jusqu'au bord droit) */
+.page-activites .activity-row-fullbleed-right{
+  width:100vw;
+  width:100dvw;
+  max-width:100vw;
+  max-width:100dvw;
+  margin-left:calc(50% - 50vw);
+  margin-left:calc(50% - 50dvw);
+
+  /* On garde un layout côte-à-côte fiable (flex),
+     la classe .reverse gère l'ordre (vidéo à droite). */
+  display:flex;
+  gap:0;
+  align-items:stretch;
+
+  /* Section plus grande (donc vidéo plus visible) */
+  padding:var(--espace-6) 0;
+}
+
+/* Vidéo Arts du feu : plus haute que le 16/9 */
+.page-activites .activity-media-fullbleed-right.slim{
+  aspect-ratio: 4/3;
+}
+
+.page-activites .activity-row-fullbleed-right .activity-text{
+  --activity-gutter: calc(
+    (100vw - min(var(--max-largeur), calc(100vw - (var(--espace-5) * 2)))) / 2
+  );
+  padding:0 var(--espace-6) var(--espace-6) var(--activity-gutter);
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.page-activites .activity-media-fullbleed-right{
+  flex:0 0 50%;
+  max-width:50%;
+  margin:0;
+}
+
+.page-activites .activity-row-fullbleed-right .activity-text{
+  flex:0 0 50%;
+  max-width:50%;
+}
+
+@media (max-width: 900px){
+  .page-activites .activity-row,
+  .page-activites .activity-row.reverse{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .page-activites .activity-row-fullbleed{
+    width:auto;
+    max-width:none;
+    margin-left:0;
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .page-activites .activity-row-fullbleed .activity-text{
+    padding:0;
+    display:block;
+  }
+
+  .page-activites .activity-row-fullbleed-right{
+    width:auto;
+    max-width:none;
+    margin-left:0;
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    gap:var(--espace-4);
+    padding:0;
+  }
+
+  .page-activites .activity-row-fullbleed-right .activity-text{
+    padding:0;
+    display:block;
+  }
+
+  .page-activites .activity-media-fullbleed-right{
+    flex:1 1 auto;
+    max-width:none;
+    width:100%;
+  }
+
+  .page-activites .activity-row-fullbleed-right .activity-text{
+    flex:1 1 auto;
+    max-width:none;
+    width:100%;
+  }
+
+  /* Sur smartphone, on évite une vidéo trop haute */
+  .page-activites .activity-media-fullbleed-right.slim{aspect-ratio:16/9;}
+
+  .page-activites .activity-media-fullbleed-right{grid-column:auto;}
+}
+
+.home-video-block{
+  padding:0;
+}
+
+/*
+  === ACCUEIL : VIDÉO (full-bleed) ===
+  Objectif : la vidéo prend toute la largeur de l'écran (100vw), même si elle
+  est dans un .container.
+  - margin-left/right "sort" la vidéo du container (effet pleine largeur)
+  - border/radius/ombre supprimés pour un rendu propre
+*/
+.home-video-wrap{
+  /* Réglages locaux : hauteur de la vidéo + taille du fondu */
+  --home-video-hauteur: clamp(820px, 50vh, 1020px);
+  --home-video-fondu: clamp(36px, 6vw, 90px);
+  --home-video-fondu-zone: calc(var(--home-video-fondu) * 2);
+
+  width:100vw;
+  width:100dvw;
+  max-width:100vw;
+  max-width:100dvw;
+  margin-left:calc(50% - 50vw);
+  margin-left:calc(50% - 50dvw);
+  margin-right:calc(50% - 50vw);
+  margin-right:calc(50% - 50dvw);
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+
+  /* On diminue la hauteur sans toucher à la largeur (100vw) */
+  height:var(--home-video-hauteur);
+
+  /* Fond noir pour éviter toute ligne claire aux jonctions */
+  background:var(--couleur-noir);
+
+  /* Nécessaire pour positionner les dégradés/blur au-dessus de la vidéo */
+  position:relative;
+}
+
+/* Dégradés + léger flou (haut/bas) pour masquer la démarcation */
+.home-video-wrap::before,
+.home-video-wrap::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  /* Zone plus grande + masque -> évite une "ligne" de fin de flou */
+  height:var(--home-video-fondu-zone);
+  pointer-events:none;
+  z-index:2;
+
+  /* Le blur marche surtout sur navigateurs qui supportent backdrop-filter */
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  opacity:1;
+}
+
+.home-video-wrap::before{
+  top:0;
+  background:linear-gradient(to bottom,
+    color-mix(in oklab, var(--couleur-noir), transparent 0%) 0%,
+    color-mix(in oklab, var(--couleur-noir), transparent 55%) 45%,
+    transparent 75%);
+
+  /* Le masque fait disparaître l'overlay AVANT la fin du bloc -> pas de seam */
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 85%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 85%, transparent 100%);
+}
+
+.home-video-wrap::after{
+  bottom:0;
+  background:linear-gradient(to top,
+    color-mix(in oklab, var(--couleur-noir), transparent 0%) 0%,
+    color-mix(in oklab, var(--couleur-noir), transparent 55%) 45%,
+    transparent 75%);
+
+  -webkit-mask-image: linear-gradient(to top, #000 0%, #000 55%, transparent 85%, transparent 100%);
+  mask-image: linear-gradient(to top, #000 0%, #000 55%, transparent 85%, transparent 100%);
+}
+
+/* Assure que la vidéo remplit le cadre en hauteur */
+.home-video-wrap .media{
+  position:relative;
+  z-index:1;
+}
+
+.home-video-wrap .placeholder{
+  min-height:var(--home-video-hauteur);
+  background:var(--couleur-noir);
+  color:var(--couleur-blanc);
+}
+
+/* Accueil : photos sans cadre (mais fallback noir si manquant) */
+.home-photos .card{background:transparent; border:0; box-shadow:none; padding:0}
+.home-photos .media-wrap{border:0; box-shadow:none}
+.home-photos .placeholder{background:var(--couleur-noir); color:var(--couleur-blanc)}
+
+/*
+  === ACCUEIL : 3 PHOTOS DU BAS ===
+  Layout actuel :
+  - 2 photos en haut (sans rognage)
+  - 1 grande photo en dessous (cracheur) sur toute la largeur
+
+  1) Hauteur des images (sans rognage) :
+     - Petites : .home-photo .media { max-height: ... }
+     - Grande :  .home-photo-large .media { max-height: ... }
+
+  2) Espacement entre photos :
+     - gap dans .home-photos-grid
+*/
+.home-photos{padding:var(--espace-6) 0 var(--espace-7);}
+
+.home-photos-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:var(--espace-3);
+  align-items:start;
+
+}
+
+@media (max-width: 900px){
+  .home-photos-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+/*
+  Desktop : superposition
+  - les 2 petites photos (bâton + danseuse) sont au-dessus
+  - la grande photo (cracheur) est en dessous (z-index plus bas)
+  - tout démarre au même "haut" (grid-row: 1)
+*/
+.home-photos-grid > .home-photo-baton{
+  grid-column:1;
+  grid-row:1;
+  position:relative;
+  z-index:2;
+}
+
+.home-photos-grid > .home-photo-danseuse{
+  grid-column:2;
+  grid-row:1;
+  position:relative;
+  z-index:2;
+}
+
+.home-photos-grid > .home-photo-cracheur{
+  grid-column:1 / -1;
+  grid-row:1;
+  position:relative;
+  z-index:1;
+}
+
+/* Mobile : on enlève la superposition et on remet un empilement vertical */
+@media (max-width: 900px){
+  .home-photos-grid > .home-photo-danseuse{grid-column:1; grid-row:1; z-index:auto;}
+  .home-photos-grid > .home-photo-baton{grid-column:1; grid-row:2; z-index:auto;}
+  .home-photos-grid > .home-photo-cracheur{grid-column:1; grid-row:3; z-index:auto;}
+
+  /* Mobile : pas de décalage/superposition */
+  .home-photos-grid > .home-photo-cracheur{transform:none;}
+}
+
+/*
+  Important : pour éviter le rognage, on centre les images et on les affiche
+  en gardant leur ratio (pas de "cover").
+*/
+.home-photos .media-wrap{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  /* Pas de "cadre" : fond transparent pour ne pas masquer les autres photos */
+  background:transparent;
+}
+
+.home-photos .media{
+  width:auto;
+  height:auto;
+  max-width:100%;
+  object-fit:contain;
+}
+
+/* Petites photos (danseuse + bâton) */
+.home-photo .media{max-height:320px;}
+
+/* Grande photo (cracheur, en dessous) */
+.home-photo-large .media{max-height:clamp(620px, 62vh, 820px);}
+
+/*
+  (Optionnel) Ancien style d'un gros titre en "carte" sur l'accueil.
+  Si tu n'utilises plus de section .home-text dans index.html, tu peux ignorer.
+*/
+.home-text .card h1{
+  font-size:clamp(28px, 3.2vw, 44px);
+  line-height:1.08;
+}
+
+/*
+  === GALERIE ===
+  Grille d'images/vidéos sur la page galerie.
+  Modifie :
+  - Colonnes : grid-template-columns
+  - Espace : gap
+*/
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:var(--espace-3);
+}
+
+@media (max-width: 980px){
+  .gallery{grid-template-columns:1fr}
+}
+
+.gallery-item h3{margin:var(--espace-3) 0 0; font-family:var(--police-titre); font-size:18px}
+.gallery-item p{margin:0; color:var(--couleur-texte-secondaire)}
+
+/* Page "Notre équipe" : nom/rôle au-dessus de fond_texte */
+.page-equipe .gallery{
+  grid-template-columns:repeat(4, minmax(0, 1fr));
+  column-gap:var(--espace-8);
+  row-gap:var(--espace-11);
+}
+
+/* Page "Galerie" : écarte les blocs (dossiers) un peu plus */
+.page-galerie .gallery{
+  column-gap:var(--espace-6);
+  row-gap:var(--espace-7);
+}
+
+/* Responsive (sinon ça déborde sur petits écrans car cette règle override le @media global) */
+@media (max-width: 1100px){
+  .page-equipe .gallery{grid-template-columns:repeat(3, minmax(0, 1fr));}
+}
+
+@media (max-width: 820px){
+  .page-equipe .gallery{grid-template-columns:repeat(2, minmax(0, 1fr));}
+}
+
+@media (max-width: 540px){
+  .page-equipe .gallery{grid-template-columns:1fr;}
+}
+
+.page-equipe .gallery-item.card{
+  background:transparent;
+  border:0;
+  box-shadow:none;
+  padding:0;
+}
+
+/* Page "Galerie" : pas de fond/bordure pour les items */
+.page-galerie .gallery-item.card{
+  background:transparent;
+  border:0;
+  box-shadow:none;
+  padding:0;
+}
+
+.page-galerie .gallery-item.card:hover{
+  transform:none;
+  box-shadow:none;
+}
+
+/* Indicateur nombre de photos sur les vignettes */
+.gallery-count{
+  position:absolute;
+  bottom:8px;
+  right:8px;
+  background:color-mix(in oklab, var(--couleur-noir), transparent 20%);
+  color:var(--couleur-blanc);
+  padding:6px 10px;
+  border-radius:var(--rayon-tres-petit);
+  font-size:12px;
+  font-weight:700;
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+}
+
+/* Galerie : curseur pointer sur les groupes cliquables */
+.page-galerie .gallery-group .media-wrap{
+  cursor:pointer;
+  transition:var(--transition-standard);
+}
+
+.page-galerie .gallery-group .media-wrap:hover{
+  transform:scale(1.02);
+}
+
+/*
+  === GALLERY LIGHTBOX (avec navigation) ===
+  Modal pour afficher les photos d'une prestation et naviguer entre elles.
+*/
+.gallery-lightbox{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:color-mix(in oklab, var(--couleur-noir), transparent 5%);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:var(--espace-5);
+  cursor:default;
+  opacity:0;
+  transition:opacity 300ms ease;
+}
+
+.gallery-lightbox:not(.hidden){
+  opacity:1;
+}
+
+.gallery-lightbox .lightbox-close{
+  position:absolute;
+  top:var(--espace-5);
+  right:var(--espace-5);
+  width:48px;
+  height:48px;
+  padding:0;
+  border:0;
+  background:transparent;
+  color:var(--couleur-blanc);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:2;
+}
+
+.lightbox-nav{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:48px;
+  height:48px;
+  padding:0;
+  border:0;
+  background:color-mix(in oklab, var(--couleur-blanc), transparent 20%);
+  color:var(--couleur-blanc);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:var(--rayon-petit);
+  transition:var(--transition-standard);
+  z-index:2;
+}
+
+.lightbox-nav:hover{
+  background:color-mix(in oklab, var(--couleur-blanc), transparent 10%);
+}
+
+.lightbox-prev{
+  left:var(--espace-5);
+}
+
+.lightbox-next{
+  right:var(--espace-5);
+}
+
+.lightbox-content{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:var(--espace-4);
+  max-width:95vw;
+  max-height:90vh;
+}
+
+.gallery-lightbox .lightbox-image{
+  max-width:100%;
+  max-height:calc(90vh - 120px);
+  width:auto;
+  height:auto;
+  object-fit:contain;
+  border-radius:var(--rayon);
+  box-shadow:var(--ombre-2);
+  transform:scale(0.95);
+  transition:transform 300ms ease;
+}
+
+.gallery-lightbox:not(.hidden) .lightbox-image{
+  transform:scale(1);
+}
+
+.lightbox-caption{
+  text-align:center;
+  color:var(--couleur-blanc);
+  max-width:800px;
+}
+
+.caption-title{
+  font-size:clamp(18px, 2vw, 24px);
+  font-weight:700;
+  margin-bottom:var(--espace-2);
+  font-family:EDO, serif;
+}
+
+.caption-date{
+  font-size:clamp(14px, 1.4vw, 16px);
+  opacity:0.9;
+}
+
+.lightbox-counter{
+  position:absolute;
+  bottom:var(--espace-5);
+  left:50%;
+  transform:translateX(-50%);
+  background:color-mix(in oklab, var(--couleur-noir), transparent 20%);
+  color:var(--couleur-blanc);
+  padding:8px 16px;
+  border-radius:var(--rayon-petit);
+  font-size:14px;
+  font-weight:700;
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+  z-index:2;
+}
+
+@media (max-width: 900px){
+  .lightbox-nav{
+    width:40px;
+    height:40px;
+  }
+  
+  .lightbox-prev{
+    left:var(--espace-3);
+  }
+  
+  .lightbox-next{
+    right:var(--espace-3);
+  }
+}
+
+.page-equipe .gallery-item .media-wrap{
+  border:0;
+  box-shadow:none;
+  /* Photo plus petite (sans toucher au fond_texte) */
+  width:min(200px, 100%);
+  height: 100%;
+  margin:0 auto;
+}
+
+/* Photos plus longues (format portrait) */
+.page-equipe .gallery-item .media-wrap.slim{aspect-ratio: 7/8;}
+
+.page-equipe .member-caption{
+  position:relative;
+  /* Le fond_texte chevauche la photo : la photo passe dessous */
+  margin-top:calc(-1 * 100px);
+  z-index:2;
+}
+
+.page-equipe .member-caption-bg{
+  width:100%;
+  height:200px;
+  display:block;
+  object-fit:contain;
+}
+
+.page-equipe .member-caption-content{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:var(--espace-3);
+}
+
+.page-equipe .member-caption-content h3{
+  margin:0;
+  font-family:var(--police-titre);
+  font-size:18px;
+  color:var(--couleur-accent-feu);
+}
+
+.page-equipe .member-caption-content p{
+  margin:0;
+  color:var(--couleur-accent-feu);
+  font-weight:700;
+  font-size:clamp(12px, 1.05vw, 14px);
+}
+
+/*
+  === FORM ===
+  Styles des formulaires (contact / demande de prestation).
+*/
+.form{display:grid; gap:var(--espace-3)}
+.field{display:grid; gap:var(--espace-1)}
+label{font-weight:800}
+
+input, textarea{
+  width:100%;
+  padding:12px 14px;
+  border-radius:var(--rayon-petit);
+  border:1px solid var(--couleur-bordure);
+  background:var(--couleur-surface-2);
+  color:var(--couleur-texte-principal);
+  font:inherit;
+  transition:var(--transition-standard);
+}
+
+input::placeholder, textarea::placeholder{color:var(--couleur-texte-secondaire)}
+input:hover, textarea:hover{border-color:var(--couleur-bordure-forte)}
+input:focus, textarea:focus{border-color:var(--couleur-focus)}
+textarea{min-height:140px; resize:vertical}
+
+.notice{margin-top:var(--espace-3)}
+.social-block{margin-top:var(--espace-2)}
+
+/*
+  === FOOTER ===
+  Demande :
+  - Fond beige (#EDE0D4)
+  - Liens (mentions légales, etc.) centrés
+  - Copyright "2026 Spirit of Fire" juste en dessous
+  - Logo conservé en bas à gauche
+*/
+.site-footer{
+  margin-top:var(--espace-5);
+  /* Hauteur du bandeau (raccourcis ici) */
+  padding:var(--espace-6) 0;
+  background:var(--couleur-intro-fond);
+  color:var(--couleur-intro-texte);
+  border-top:0;
+  position:relative;
+}
+
+/*
+  Dégradé d'arrivée sur le bandeau :
+  de la couleur de fond de page (souvent noir) vers le beige du footer.
+  On le place juste AU-DESSUS du footer, pour faire une transition douce.
+*/
+.site-footer::before{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:calc(-1 * clamp(60px, 10vw, 100px));
+  height:clamp(60px, 10vw, 100px);
+  background:linear-gradient(180deg,
+    var(--couleur-fond-page) 0%,
+    var(--couleur-intro-fond) 100%);
+  pointer-events:none;
+}
+
+/*
+  Grille 3 colonnes :
+  - gauche : logo (aligné en bas à gauche)
+  - centre : liens + copyright (centrés)
+  - droite : colonne vide (sert à garder le centre VRAIMENT centré)
+*/
+.footer-grid{
+  display:grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items:end;
+  /* Espace interne du footer (raccourcis ici) */
+  gap:var(--espace-11);
+}
+
+.footer-left{justify-self:end;}
+.footer-center{justify-self:center; text-align:center; display:grid; gap:var(--espace-2); justify-items:center;}
+.footer-right{justify-self:start; align-self:center;}
+
+.footer-social{display:flex; gap:var(--espace-2); align-items:center; justify-content:flex-end;}
+.footer-social a{display:inline-flex; border-radius:var(--rayon-tres-petit);}
+.footer-social a:hover{transform:translateY(-2px);}
+.footer-social img{display:block; width:40px; height:40px; object-fit:contain;}
+
+/* Page Contact : réseaux dans le bloc "Coordonnées" (dans <main>) */
+.page-contact main .footer-social{
+  justify-content:flex-start;
+  margin-top:var(--espace-4);
+}
+
+/* Page Contact : blocs "Coordonnées" et "Formulaire" sans fond/contours + texte blanc */
+.page-contact .contact-coords,
+.page-contact .contact-form{
+  background:transparent;
+  background-image:none;
+  border:0;
+  box-shadow:none;
+  color:var(--couleur-blanc);
+}
+
+.page-contact .contact-coords:hover,
+.page-contact .contact-form:hover{
+  transform:none;
+  box-shadow:none;
+  border-color:transparent;
+}
+
+.page-contact .contact-coords p,
+.page-contact .contact-form p{
+  color:var(--couleur-blanc);
+}
+
+.page-contact .contact-coords a{
+  color:var(--couleur-blanc);
+}
+
+/* Page Prestations : formulaire sans fond/contours */
+.page-prestations .prestations-form,
+.page-prestations .prestations-thanks{
+  background:transparent;
+  background-image:none;
+  border:0;
+  box-shadow:none;
+}
+
+.page-prestations .prestations-form:hover,
+.page-prestations .prestations-thanks:hover{
+  transform:none;
+  box-shadow:none;
+  border-color:transparent;
+}
+
+/* Logo cliquable : pas de style de lien, mais focus clavier visible */
+.footer-logo-link{
+  display:inline-flex;
+  text-decoration:none;
+  border-radius:var(--rayon-petit);
+}
+
+.footer-logo-link:focus-visible{
+  outline:2px solid var(--couleur-header-rouge);
+  outline-offset:3px;
+}
+
+.footer-badge{
+  /* Taille du logo dans le footer (si tu veux encore plus petit, baisse ici) */
+  width:160px;
+  height:56px;
+  object-fit:cover;
+  border-radius:var(--rayon-petit);
+  border:0;
+  background:transparent;
+}
+
+/* Liens : centrés et visibles sur fond beige */
+.footer-links{display:flex; gap:var(--espace-6); flex-wrap:wrap; justify-content:center}
+
+.footer-links a{
+  color:var(--couleur-intro-texte);
+  font-weight:800;
+  /* Taille du texte des liens (réduis/augmente ici) */
+  font-size:clamp(12px, 1.05vw, 13px);
+  text-decoration:none;
+  transition:var(--transition-standard);
+}
+
+.footer-links a:hover{color:var(--couleur-header-rouge); transform:translateY(-2px)}
+
+/* Petit texte (copyright, infos) */
+.small{font-size:14px; color:var(--couleur-texte-secondaire)}
+.site-footer .small{color:color-mix(in oklab, var(--couleur-intro-texte), transparent 15%);}
+
+/* Taille du copyright dans le footer (réduis/augmente ici) */
+.site-footer .footer-copy{font-size:clamp(11px, .95vw, 12px);}
+
+/* Mobile : tout sur une seule ligne, sans logo */
+@media (max-width: 900px){
+  /* On passe en layout "barre" */
+  .footer-grid{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:var(--espace-3);
+  }
+
+  /* En mobile : pas de logo */
+  .footer-left{display:none;}
+  .footer-right{display:none;}
+
+  /*
+    En mobile :
+    - Liens sur UNE ligne
+    - Copyright (2026 Spirit of Fire) sur la ligne du dessous
+  */
+  .footer-center{
+    order:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:var(--espace-2);
+    text-align:center;
+    max-width:100%;
+    color:var(--couleur-blanc);
+  }
+
+  .footer-links{
+    /* Liens en une ligne, avec scroll horizontal si trop long */
+    max-width:100%;
+    white-space:nowrap;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    flex-wrap:nowrap;
+    gap:var(--espace-2);
+  }
+
+  /* Un peu plus petit pour tenir sur une ligne */
+  .footer-links a{font-size:12px;}
+  .site-footer .footer-copy{font-size:11px;}
+}
+
+/*
+  === LIGHTBOX (zoom image) ===
+  Modal pour agrandir les images de l'équipe.
+*/
+.image-lightbox{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:color-mix(in oklab, var(--couleur-noir), transparent 5%);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:var(--espace-5);
+  cursor:zoom-out;
+  opacity:0;
+  transition:opacity 300ms ease;
+}
+
+.image-lightbox:not(.hidden){
+  opacity:1;
+}
+
+.lightbox-close{
+  position:absolute;
+  top:var(--espace-5);
+  right:var(--espace-5);
+  width:48px;
+  height:48px;
+  padding:0;
+  border:0;
+  background:transparent;
+  color:var(--couleur-blanc);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:2;
+}
+
+.lightbox-image{
+  max-width:90vw;
+  max-height:90vh;
+  width:auto;
+  height:auto;
+  object-fit:contain;
+  border-radius:var(--rayon);
+  box-shadow:var(--ombre-2);
+  cursor:default;
+  transform:scale(0.95);
+  transition:transform 300ms ease;
+}
+
+.image-lightbox:not(.hidden) .lightbox-image{
+  transform:scale(1);
+}
+
+/* Page équipe : rendre les images cliquables */
+.page-equipe .gallery-item .media-wrap{
+  cursor:zoom-in;
+  transition:var(--transition-standard);
+}
+
+.page-equipe .gallery-item .media-wrap:hover{
+  transform:scale(1.02);
+}
+
+/*
+  === ANIMATION : REVEAL AU SCROLL ===
+  Fondu des éléments quand ils entrent dans le viewport.
+  La classe .reveal est ajoutée en JS uniquement sur le contenu (<main>).
+*/
+.reveal{
+  opacity:0;
+  transition:opacity 700ms ease;
+}
+
+.reveal.is-visible{
+  opacity:1;
+}
+
+/*
+  === ACCESSIBILITÉ : RÉDUCTION DES ANIMATIONS ===
+  Si l'utilisateur a activé "Réduire les animations" dans son OS,
+  on coupe transitions/animations et les déplacements au hover.
+*/
+@media (prefers-reduced-motion: reduce){
+  *{scroll-behavior:auto}
+  .btn,.card,.nav a,.footer-links a,.site-header,input,textarea{transition:none}
+  .btn:hover,.card:hover,.nav a:hover,.footer-links a:hover{transform:none}
+  .home-intro-logo,.home-intro-title,.home-intro-subtitle,.home-intro-hint{opacity:1; transform:none; animation:none}
+  .media-wrap.video-fade{opacity:1; transform:none; transition:none}
+  .reveal{opacity:1 !important; transition:none !important}
+  .lightbox-image{transform:scale(1); transition:none}
+  .page-equipe .gallery-item .media-wrap:hover{transform:none}
+}
