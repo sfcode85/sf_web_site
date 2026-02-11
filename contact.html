@@ -68,7 +68,11 @@
               </div>
 
               <div class="card span-2 contact-form">
-                <form id="contactForm" class="form" method="post" action="booking.php">
+                <form id="contactForm" class="form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/contact.html?sent=1">
+                  <input type="hidden" name="form-name" value="contact" />
+                  <div class="hidden">
+                    <label>Ne pas remplir : <input name="bot-field" /></label>
+                  </div>
                   <div class="field">
                     <label for="name">Nom</label>
                     <input id="name" name="name" autocomplete="name" />
@@ -125,44 +129,19 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    document.getElementById('contactForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const status = document.getElementById('contactStatus');
-      status.textContent = "Envoi en cours…";
-
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const message = document.getElementById('message').value.trim();
-
-      if (!email || !message) {
-        status.textContent = 'Merci de remplir les champs obligatoires.';
-        return;
+    const status = document.getElementById('contactStatus');
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('sent') === '1') {
+      status.textContent = 'Message envoyé.';
+      if (history.replaceState) {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('sent');
+        history.replaceState({}, '', url.pathname + url.hash);
       }
+    }
 
-      const formData = new FormData();
-      formData.set('name', name);
-      formData.set('email', email);
-      formData.set('message', message);
-
-      fetch('booking.php', {
-        method: 'POST',
-        body: formData,
-      })
-        .then(async (res) => {
-          const payload = await res.json().catch(() => null);
-          if (!res.ok) {
-            const msg = payload && payload.error ? payload.error : "Erreur lors de l'envoi.";
-            throw new Error(msg);
-          }
-          return payload;
-        })
-        .then(() => {
-          status.textContent = 'Message envoyé.';
-          e.currentTarget.reset();
-        })
-        .catch((err) => {
-          status.textContent = "Ça n'a pas fonctionné. Envoie ton message à l'adresse mail de l'asso : asso.spirit.of.fire@gmail.com.";
-        });
+    document.getElementById('contactForm').addEventListener('submit', () => {
+      status.textContent = 'Envoi en cours…';
     });
   </script>
 </body>

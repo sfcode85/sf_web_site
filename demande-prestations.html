@@ -44,7 +44,11 @@
         <section class="section">
           <div class="container">
             <div class="card prestations-form">
-              <form id="bookingForm" class="form" method="post" action="booking.php">
+              <form id="bookingForm" class="form" name="prestations" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/demande-prestations.html?sent=1">
+                <input type="hidden" name="form-name" value="prestations" />
+                <div class="hidden">
+                  <label>Ne pas remplir : <input name="bot-field" /></label>
+                </div>
                 <div class="grid grid-2">
                   <div class="field">
                     <label for="nom">Nom</label>
@@ -133,36 +137,22 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    document.getElementById('bookingForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const status = document.getElementById('bookingStatus');
-      const thanks = document.getElementById('bookingThanks');
-      status.textContent = "Envoi en cours…";
+    const status = document.getElementById('bookingStatus');
+    const thanks = document.getElementById('bookingThanks');
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('sent') === '1') {
+      thanks.classList.remove('hidden');
+      status.textContent = 'Demande envoyée.';
+      if (history.replaceState) {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('sent');
+        history.replaceState({}, '', url.pathname + url.hash);
+      }
+    }
+
+    document.getElementById('bookingForm').addEventListener('submit', () => {
+      status.textContent = 'Envoi en cours…';
       thanks.classList.add('hidden');
-
-      const form = e.currentTarget;
-      const formData = new FormData(form);
-
-      fetch(form.action, {
-        method: 'POST',
-        body: formData,
-      })
-        .then(async (res) => {
-          const payload = await res.json().catch(() => null);
-          if (!res.ok) {
-            const message = payload && payload.error ? payload.error : "Erreur lors de l'envoi.";
-            throw new Error(message);
-          }
-          return payload;
-        })
-        .then(() => {
-          thanks.classList.remove('hidden');
-          status.textContent = 'Demande envoyée.';
-          form.reset();
-        })
-        .catch((err) => {
-          status.textContent = "Ça n'a pas fonctionné. Envoie ta demande à l'adresse mail de l'asso : asso.spirit.of.fire@gmail.com.";
-        });
     });
   </script>
 </body>
