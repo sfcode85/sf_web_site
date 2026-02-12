@@ -128,6 +128,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const video = entry.target;
         const wrapper = video.closest('.media-wrap');
         if (entry.isIntersecting) {
+          const dataSrc = video.getAttribute('data-src');
+          if (dataSrc && !video.getAttribute('src')) {
+            video.setAttribute('src', dataSrc);
+            video.load();
+          }
           if (wrapper && wrapper.classList.contains('video-fade')) {
             wrapper.classList.add('is-inview');
           }

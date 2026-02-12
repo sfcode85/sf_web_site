@@ -1746,7 +1746,7 @@ Augmenter taille du dégradé (pour éviter les lignes claires sur certains écr
   padding:60px 90px 26px;
 
   /* Fond : centré sur le texte, s'étire pour suivre le bloc */
-  background-image:url("assets_equipe/fond_texte.png");
+  background-image:url("assets_equipe_opt/fond_texte.png");
   background-repeat:no-repeat;
   background-position-y: bottom;
   background-position-x: calc(50% + 10px);
