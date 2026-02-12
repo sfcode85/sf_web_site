@@ -17,19 +17,27 @@ function setupVideoFallback(video) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // === Analytics (Google Tag Manager) ===
-  // Container GTM : fourni par Google
-  const GTM_CONTAINER_ID = 'GTM-PJC4XZ4L';
+  // === Analytics (GA4 via Google tag / gtag.js) ===
+  // ID de mesure GA4
+  const GA_MEASUREMENT_ID = 'G-VFW8KCWJ9V';
 
-  let gtmLoaded = false;
-  const loadGoogleTagManager = () => {
-    if (gtmLoaded) return;
-    if (!GTM_CONTAINER_ID) return;
-    gtmLoaded = true;
+  let gaLoaded = false;
+  const loadGoogleAnalytics = () => {
+    if (gaLoaded) return;
+    if (!GA_MEASUREMENT_ID) return;
+    gaLoaded = true;
 
     const script = document.createElement('script');
-    script.text = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':\nnew Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],\nj=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=\n'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);\n})(window,document,'script','dataLayer','${GTM_CONTAINER_ID}');`;
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GA_MEASUREMENT_ID)}`;
     document.head.appendChild(script);
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ window.dataLayer.push(arguments); }
+    window.gtag = window.gtag || gtag;
+
+    gtag('js', new Date());
+    gtag('config', GA_MEASUREMENT_ID);
   };
 
   // Cookies consent banner (simple): shown on first visit only.
@@ -64,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.documentElement.setAttribute('data-cookie-consent', value);
 
     if (value === 'accepted') {
-      loadGoogleTagManager();
+      loadGoogleAnalytics();
     }
   };
 
@@ -105,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
   } else {
     document.documentElement.setAttribute('data-cookie-consent', consent);
     if (consent === 'accepted') {
-      loadGoogleTagManager();
+      loadGoogleAnalytics();
     }
   }
 
