@@ -310,6 +310,87 @@ textarea:focus-visible{
 .hidden{display:none !important;}
 
 /*
+  === COOKIES BANNER ===
+  Affiché uniquement à la première visite (JS).
+  Utilise les couleurs/tokens existants.
+*/
+.cookie-banner{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:200;
+  background:var(--couleur-intro-fond);
+  color:var(--couleur-intro-texte);
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+}
+
+.cookie-banner-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--espace-3);
+  padding:var(--espace-3);
+}
+
+.cookie-banner p{
+  margin:0;
+  font-size:14px;
+  line-height:1.35;
+}
+
+.cookie-banner a{
+  color:inherit;
+  font-weight:800;
+  text-decoration:underline;
+}
+
+.cookie-actions{
+  display:flex;
+  gap:var(--espace-2);
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.cookie-actions .btn{white-space:nowrap;}
+
+/* Bouton "Refuser" : texte noir, sans contour */
+.cookie-actions .btn[data-cookie="refuse"]{
+  color:var(--couleur-intro-texte);
+  border:0;
+  box-shadow:none;
+  background:transparent;
+}
+
+.cookie-actions .btn[data-cookie="refuse"]:hover{
+  border:0;
+  box-shadow:none;
+  transform:none;
+  background:transparent;
+}
+
+/* Bouton principal du bandeau (rouge demandé) */
+.cookie-actions .btn.primary{
+  background:#95000C;
+  border-color:#95000C;
+  color:var(--couleur-blanc);
+}
+
+.cookie-actions .btn.primary:hover{
+  background:color-mix(in oklab, #95000C, white 10%);
+  border-color:color-mix(in oklab, #95000C, white 10%);
+  filter:none;
+}
+
+@media (max-width: 540px){
+  .cookie-banner-inner{flex-direction:column; align-items:stretch;}
+  .cookie-actions{justify-content:stretch;}
+  .cookie-actions .btn{width:100%;}
+}
+
+/*
   === HEADER ===
   Barre fixe en haut (logo + menu).
   Comportement :

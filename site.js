@@ -17,6 +17,98 @@ function setupVideoFallback(video) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // === Analytics (Google Tag Manager) ===
+  // Container GTM : fourni par Google
+  const GTM_CONTAINER_ID = 'GTM-PJC4XZ4L';
+
+  let gtmLoaded = false;
+  const loadGoogleTagManager = () => {
+    if (gtmLoaded) return;
+    if (!GTM_CONTAINER_ID) return;
+    gtmLoaded = true;
+
+    const script = document.createElement('script');
+    script.text = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':\nnew Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],\nj=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=\n'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);\n})(window,document,'script','dataLayer','${GTM_CONTAINER_ID}');`;
+    document.head.appendChild(script);
+  };
+
+  // Cookies consent banner (simple): shown on first visit only.
+  // Stores preference in localStorage + a small cookie.
+  const CONSENT_KEY = 'sf_cookie_consent';
+  const CONSENT_COOKIE = 'sf_cookie_consent';
+
+  const getCookie = (name) => {
+    const match = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/[.$?*|{}()\[\]\\\/\+^]/g, '\\$&') + '=([^;]*)'));
+    return match ? decodeURIComponent(match[1]) : null;
+  };
+
+  const setCookie = (name, value, maxAgeSeconds) => {
+    const maxAge = typeof maxAgeSeconds === 'number' ? `; Max-Age=${maxAgeSeconds}` : '';
+    document.cookie = `${name}=${encodeURIComponent(value)}${maxAge}; Path=/; SameSite=Lax`;
+  };
+
+  const getConsent = () => {
+    try {
+      const v = localStorage.getItem(CONSENT_KEY);
+      if (v) return v;
+    } catch (_) {}
+    return getCookie(CONSENT_COOKIE);
+  };
+
+  const setConsent = (value) => {
+    try {
+      localStorage.setItem(CONSENT_KEY, value);
+    } catch (_) {}
+    // 1 an
+    setCookie(CONSENT_COOKIE, value, 60 * 60 * 24 * 365);
+    document.documentElement.setAttribute('data-cookie-consent', value);
+
+    if (value === 'accepted') {
+      loadGoogleTagManager();
+    }
+  };
+
+  const consent = getConsent();
+  if (!consent) {
+    const banner = document.createElement('div');
+    banner.className = 'cookie-banner';
+    banner.setAttribute('role', 'region');
+    banner.setAttribute('aria-label', 'Préférences cookies');
+    banner.innerHTML = `
+      <div class="cookie-banner-inner">
+        <p>
+          Nous utilisons des cookies essentiels au bon fonctionnement du site.
+          Vous pouvez accepter ou refuser les cookies non essentiels.
+          <a href="legals_mentions.html">Mentions légales</a>.
+        </p>
+        <div class="cookie-actions">
+          <button type="button" class="btn" data-cookie="refuse">Refuser</button>
+          <button type="button" class="btn primary" data-cookie="accept">Accepter</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(banner);
+
+    const close = () => {
+      banner.remove();
+    };
+
+    banner.querySelector('[data-cookie="accept"]').addEventListener('click', () => {
+      setConsent('accepted');
+      close();
+    });
+    banner.querySelector('[data-cookie="refuse"]').addEventListener('click', () => {
+      setConsent('refused');
+      close();
+    });
+  } else {
+    document.documentElement.setAttribute('data-cookie-consent', consent);
+    if (consent === 'accepted') {
+      loadGoogleTagManager();
+    }
+  }
+
   document.querySelectorAll('img.media[data-fallback="1"]').forEach(setupImageFallback);
   document.querySelectorAll('video.media[data-fallback="1"]').forEach(setupVideoFallback);
 
