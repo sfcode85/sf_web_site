@@ -155,27 +155,17 @@
                 <p>Prestation du 5 avril 2024</p>
               </article>
 
-              <!-- Autre : regroupe les dossiers à 1 photo -->
-              <article class="card gallery-item gallery-group" data-gallery="autres">
+              <!-- Autre : 6 photos -->
+              <article class="card gallery-item gallery-group" data-gallery="noel">
                 <div class="media-wrap slim">
-                  <img class="media" data-fallback="1" loading="lazy" decoding="async" src="assets_galerie_opt/mallievre_2025.JPG" alt="Autre" />
+                  <img class="media" data-fallback="1" loading="lazy" decoding="async" src="assets_galerie_opt/mallievre_2025.JPG" alt="Marchés de Noël" />
                   <div class="placeholder hidden">Image manquante</div>
-                  <div class="gallery-count">3 photos</div>
+                  <div class="gallery-count">6 photos</div>
                 </div>
-                <h3>Autres</h3>
+                <h3>Marchés de Noël</h3>
                 <p>Divers</p>
               </article>
 
-              <!-- Mortagne 2026 : 3 photos -->
-              <article class="card gallery-item gallery-group" data-gallery="mortagne">
-                <div class="media-wrap slim">
-                  <img class="media" data-fallback="1" loading="lazy" decoding="async" src="assets_galerie_opt/mortagne_2026.JPG" alt="Mortagne 2026" />
-                  <div class="placeholder hidden">Image manquante</div>
-                  <div class="gallery-count">3 photos</div>
-                </div>
-                <h3>Mortagne 2026</h3>
-                <p>Prestation de février 2026</p>
-              </article>
             </div>
           </div>
         </section>
@@ -261,8 +251,8 @@
       parade: {
         title: 'Parade de Noël des Herbiers',
         photos: [
-          { src: 'assets_galerie_opt/parade_2021.JPG', alt: 'Parade de Noël des Herbiers', date: '11 décembre 2021' },
           { src: 'assets_galerie_opt/parade_2021.jpg', alt: 'Parade de Noël des Herbiers', date: '11 décembre 2021' },
+          { src: 'assets_galerie_opt/parade_2021.JPG', alt: 'Parade de Noël des Herbiers', date: '11 décembre 2021' },
           { src: 'assets_galerie_opt/parade_2022.jpeg', alt: 'Parade de Noël des Herbiers', date: '3 décembre 2022' },
           { src: 'assets_galerie_opt/parade_2022_1.jpeg', alt: 'Parade de Noël des Herbiers', date: '3 décembre 2022' }
         ]
@@ -279,9 +269,9 @@
       corcoue: {
         title: 'Festival Les Déluretz',
         photos: [
-          { src: 'assets_galerie_opt/corcoue_1.jpg', alt: 'Évènement les Etoiles du Lac', date: '18 septembre 2021' },
-          { src: 'assets_galerie_opt/corcoue_2.jpg', alt: 'Évènement les Etoiles du Lac', date: '18 septembre 2021' },
-          { src: 'assets_galerie_opt/corcoue_3.JPG', alt: 'Évènement les Etoiles du Lac', date: '18 septembre 2021' }
+          { src: 'assets_galerie_opt/corcoue_1.jpg', alt: 'Festival Les Déluretz', date: '18 septembre 2021' },
+          { src: 'assets_galerie_opt/corcoue_2.jpg', alt: 'Festival Les Déluretz', date: '18 septembre 2021' },
+          { src: 'assets_galerie_opt/corcoue_3.JPG', alt: 'Festival Les Déluretz', date: '18 septembre 2021' }
         ]
       },
       mariage: {
@@ -322,23 +312,36 @@
           { src: 'assets_galerie_opt/bde4.JPG', alt: 'Évènement privé pour un BDE', date: '5 avril 2024' }
         ]
       },
-      autres: {
-        title: 'Autres',
+      noel: {
+        title: 'Marchés de Noël',
         photos: [
           { src: 'assets_galerie_opt/mallievre_2025.JPG', alt: 'Marché de Noël Mallièvre', date: 'Décembre 2024' },
           { src: 'assets_galerie_opt/marche_montaigu_2023.jpg', alt: 'Marché de Noël Montaigu', date: '9 décembre 2023' },
-          { src: 'assets_galerie_opt/marche_montaigu_2023_1.jpg', alt: 'Marché de Noël Montaigu', date: '9 décembre 2023' }
-        ]
-      },
-      mortagne: {
-        title: 'Mortagne 2026',
-        photos: [
-          { src: 'assets_galerie_opt/mortagne_2026.JPG', alt: 'Mortagne 2026', date: '8 février 2026' },
-          { src: 'assets_galerie_opt/mortagne_2026_1.jpg', alt: 'Mortagne 2026', date: '8 février 2026' },
-          { src: 'assets_galerie_opt/mortagne_2026_2.jpg', alt: 'Mortagne 2026', date: '8 février 2026' }
+          { src: 'assets_galerie_opt/marche_montaigu_2023_1.jpg', alt: 'Marché de Noël Montaigu', date: '9 décembre 2023' },
+          { src: 'assets_galerie_opt/mortagne_2026.JPG', alt: 'Marché de Noël de Mortagne', date: '20 décembre 2025' },
+          { src: 'assets_galerie_opt/mortagne_2026_1.jpg', alt: 'Marché de Noël de Mortagne', date: '20 décembre 2025' },
+          { src: 'assets_galerie_opt/mortagne_2026_2.jpg', alt: 'Marché de Noël de Mortagne', date: '20 décembre 2025' }
         ]
       }
     };
+
+    // Vignettes (image visible avant ouverture) : 1ère photo du dossier
+    document.querySelectorAll('.gallery-group[data-gallery]').forEach((card) => {
+      const key = card.getAttribute('data-gallery');
+      const gallery = key ? galleries[key] : null;
+      const firstPhoto = gallery?.photos?.[0];
+      const img = card.querySelector('img.media');
+      const countEl = card.querySelector('.gallery-count');
+
+      if (countEl && Array.isArray(gallery?.photos)) {
+        const count = gallery.photos.length;
+        countEl.textContent = `${count} ${count === 1 ? 'photo' : 'photos'}`;
+      }
+
+      if (!img || !firstPhoto?.src) return;
+      img.src = firstPhoto.src;
+      if (firstPhoto.alt) img.alt = firstPhoto.alt;
+    });
   </script>
 </body>
 </html>
